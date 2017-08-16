@@ -4,6 +4,10 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsScene>
 #include <QFontMetricsF>
+<<<<<<< HEAD
+=======
+#include "Balance/Block.h"
+>>>>>>> sponge
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 
@@ -34,6 +38,15 @@ QRectF Balance::Channel::boundingRect() const
 
 void Balance::Channel::clearItems()
 {
+<<<<<<< HEAD
 
+=======
+//    for (auto block : childItems ()
+//         | transformed ([] (auto && child) { return dynamic_cast<TaskBlock*> (child); })
+//         | filtered ([](auto && child) { return child != null; }))
+//    {
+//        block->deleteLater ();
+//    }
+>>>>>>> sponge
 }
 

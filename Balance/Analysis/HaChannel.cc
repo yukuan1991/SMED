@@ -41,6 +41,7 @@ HaChannel::HaChannel(QGraphicsObject *parent)
 void HaChannel::addTask(add_task params)
 {
     auto newTask = new Block (this);
+    newTask->setName (params.taskName);
     newTask->setObjectName (params.taskName);
     auto totaltime =  totalTime ();
     auto width = (params.time / totaltime) * (channelWidth - 2 * channelGrayWidth);
