@@ -41,7 +41,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1">
      <item>
-      <widget class="video_widget" name="video_player" native="true"/>
+      <widget class="QWidget" name="video_player" native="true"/>
      </item>
      <item>
       <widget class="QWidget" name="widget_2" native="true"/>
@@ -145,12 +145,6 @@
    <class>Balance::Analysis::smed_view</class>
    <extends>QGraphicsView</extends>
    <header>Balance/Analysis/smed_view.h</header>
-  </customwidget>
-  <customwidget>
-   <class>video_widget</class>
-   <extends>QWidget</extends>
-   <header>video/video_widget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

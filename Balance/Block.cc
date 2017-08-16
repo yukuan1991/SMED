@@ -17,28 +17,68 @@ Block::Block(QGraphicsItem *parent)
     }
     setFlag (ItemSendsGeometryChanges, true);
     setAcceptHoverEvents (true);
-    connect (this, &Block::name_changed, [this] { update (); });
+    connect (this, &Block::nameChanged, [this] { update (); });
     connect (this, &Block::width_changed, [this] { update (); });
 }
 
 void Block::paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget)
 {
-//    Q_UNUSED (item);
-//    Q_UNUSED (widget);
-    if (item->state & QStyle::State_Selected)
+    auto rect = boundingRect();
+    painter->setFont(qApp->font());
+
     {
-        painter->setBrush (Qt::red);
-        painter->setPen (Qt::black);
+        auto pen = item->state & QStyle::State_Selected ?
+                    QPen (blockSelectedBorder) : QPen (blockBorder);
+        pen.setWidthF(2.0);
+        painter->setPen (pen);
+    }
+
+    const auto metrics = QFontMetricsF (painter->font ());
+    const auto h = metrics.height ();
+    const auto w = metrics.width (name ());
+
+    auto final_text = QString ();
+    auto real_w = qreal {};
+
+    if (w > rect.width ())
+    {
+        final_text = metrics.elidedText (name (), Qt::ElideMiddle, rect.width ());
+        real_w = metrics.width (final_text);
     }
     else
     {
-        painter->setBrush (Qt::yellow);
+        final_text = name ();
+        real_w = w;
     }
-    painter->setBrush (blockArea);
-    painter->setPen (Qt::NoPen);
-    painter->drawRect (boundingRect ());
 
+    painter->setBrush (item->state & QStyle::State_Selected ? blockSelectedArea :
+                        item->state & QStyle::State_MouseOver ? blockHoveredArea :
+                                                                blockArea);
+    rect.setLeft (rect.left () + 2);
+    rect.setRight (rect.right () - 2);
+    painter->drawRect (rect);
+
+    painter->setPen (item->state & QStyle::State_Selected ? blockArea.darker (): blockSelectedArea.darker ());
+
+    painter->drawText (QRectF (QPointF (rect.left () + (rect.width () - real_w) / 2,
+                                        rect.top () + (rect.height () - h) / 2),
+                               QSizeF (real_w, h)), final_text);
 }
+
+//    Q_UNUSED (item);
+//    Q_UNUSED (widget);
+//    if (item->state & QStyle::State_Selected)
+//    {
+//        painter->setBrush (Qt::red);
+//        painter->setPen (Qt::black);
+//    }
+//    else
+//    {
+//        painter->setBrush (Qt::yellow);
+//    }
+//    painter->setBrush (blockArea);
+//    painter->setPen (Qt::NoPen);
+//    painter->drawRect (boundingRect ());
 
 QRectF Block::boundingRect() const
 {

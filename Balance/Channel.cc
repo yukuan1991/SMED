@@ -4,7 +4,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsScene>
 #include <QFontMetricsF>
-#include "Balance/Analysis/HaBlock.h"
+#include "Balance/Block.h"
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 
@@ -70,11 +70,11 @@ QRectF Balance::Channel::boundingRect() const
 
 void Balance::Channel::clearItems()
 {
-    for (auto block : childItems ()
-         | transformed ([] (auto && child) { return dynamic_cast<TaskBlock*> (child); })
-         | filtered ([](auto && child) { return child != null; }))
-    {
-        block->deleteLater ();
-    }
+//    for (auto block : childItems ()
+//         | transformed ([] (auto && child) { return dynamic_cast<TaskBlock*> (child); })
+//         | filtered ([](auto && child) { return child != null; }))
+//    {
+//        block->deleteLater ();
+//    }
 }
 

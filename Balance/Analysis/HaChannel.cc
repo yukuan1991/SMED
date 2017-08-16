@@ -41,6 +41,7 @@ HaChannel::HaChannel(QGraphicsObject *parent)
 void HaChannel::addTask(add_task params)
 {
     auto newTask = new Block (this);
+    newTask->setName (params.taskName);
     newTask->setObjectName (params.taskName);
     newTask->set_width (40);
     newTask->setFlag (QGraphicsItem::ItemIsMovable);
