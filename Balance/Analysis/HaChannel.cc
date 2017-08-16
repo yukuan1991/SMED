@@ -42,7 +42,6 @@ void HaChannel::addTask(add_task params)
 {
     auto newTask = new Block (this);
     newTask->setObjectName (params.taskName);
-//    setTotalTime (params.time);
     newTask->set_width (40);
     newTask->setFlag (QGraphicsItem::ItemIsMovable);
     newTask->setFlag (QGraphicsItem::ItemIsSelectable);
