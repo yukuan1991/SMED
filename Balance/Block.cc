@@ -56,7 +56,7 @@ QVariant Block::itemChange(QGraphicsItem::GraphicsItemChange change, const QVari
         const auto x = new_pos.x ();
         const auto old_y = old_pos.y ();
         const auto old_x = old_pos.x();
-        if(0 <= x and x <= channelWidth)
+        if(0 <= x and x <= channelWidth - width())
         {
             const auto fixed_pos = QPointF (x, old_y);
             return fixed_pos;

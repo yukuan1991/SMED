@@ -42,7 +42,9 @@ void HaChannel::addTask(add_task params)
 {
     auto newTask = new Block (this);
     newTask->setObjectName (params.taskName);
-    newTask->set_width (40);
+    auto totaltime =  totalTime ();
+    auto width = (params.time / totaltime) * (channelWidth - 2 * channelGrayWidth);
+    newTask->set_width (width);
     newTask->setFlag (QGraphicsItem::ItemIsMovable);
     newTask->setFlag (QGraphicsItem::ItemIsSelectable);
     newTask->setPos ({channelGrayWidth, 0});
@@ -51,6 +53,7 @@ void HaChannel::addTask(add_task params)
 void HaChannel::setTotalTime(qreal time)
 {
     totalTime_ = time;
+
     emit totalTimeChanged (time);
 }
 

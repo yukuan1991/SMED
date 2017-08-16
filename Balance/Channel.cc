@@ -4,7 +4,6 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsScene>
 #include <QFontMetricsF>
-#include "Balance/Analysis/HaBlock.h"
 #include <boost/range/adaptor/filtered.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 
@@ -24,43 +23,8 @@ void Balance::Channel::paint(QPainter * painter, const QStyleOptionGraphicsItem 
     painter->setBrush (Qt::white);
     painter->setPen (Qt::NoPen);
     painter->drawRect (boundingRect ());
-    //Q_UNUSED (widget);
-    //Q_UNUSED (option);
-    //painter->setFont (font_);
-
-    //const auto rect = boundingRect ();
-    //const auto & textName = objectName ();
-    //const auto metrics = QFontMetricsF (painter->font ());
-    //const auto h = metrics.height ();
-    //const auto w = metrics.width (objectName ());
-
-    //auto finalText = QString ();
-    ////auto realW = qreal {};
-
-    //if (w > rect.width ())
-    //{
-    //    finalText = metrics.elidedText (textName, Qt::ElideMiddle, rect.width ());
-    //    //realW = metrics.width (finalText);
-    //}
-    //else
-    //{
-    //    finalText = textName;
-    //    //realW = w;
-    //}
-
-    //const auto color = QColor (Qt::white);
-
-    //painter->setBrush (color);
-
-    //painter->save ();
-    //painter->setPen (Qt::NoPen);
-
-    //auto r = rect;
-    //r.setTop (h);
-    //painter->drawRect (r);
-    //painter->restore ();
-
-    //painter->drawText (QRectF (QPointF ((rect.width ()- realW) / 2, rect.top ()), QSizeF (realW, h)), finalText);
+    Q_UNUSED (widget);
+    Q_UNUSED (option);
 }
 
 QRectF Balance::Channel::boundingRect() const
@@ -70,11 +34,6 @@ QRectF Balance::Channel::boundingRect() const
 
 void Balance::Channel::clearItems()
 {
-    for (auto block : childItems ()
-         | transformed ([] (auto && child) { return dynamic_cast<TaskBlock*> (child); })
-         | filtered ([](auto && child) { return child != null; }))
-    {
-        block->deleteLater ();
-    }
+
 }
 
