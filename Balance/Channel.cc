@@ -24,7 +24,6 @@ Balance::Channel::Channel(QGraphicsItem *parent)
 #include <QDebug>
 void Balance::Channel::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget *widget)
 {
-    qDebug() << "paint";
     painter->setBrush (Qt::white);
     painter->setPen (Qt::NoPen);
     painter->drawRect (boundingRect ());
