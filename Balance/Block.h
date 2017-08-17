@@ -26,7 +26,7 @@ public:
     QRectF boundingRect () const override;
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
-    void set_width (qreal w) { width_ = w;}
+    void set_width (qreal w) { width_ = w;emit width_changed (width_);}
     qreal width () const noexcept { return width_; }
 private:
     qreal width_ = 0;

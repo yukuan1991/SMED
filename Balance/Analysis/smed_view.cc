@@ -24,11 +24,10 @@ smed_view::smed_view(QWidget *parent)
     setViewportUpdateMode (QGraphicsView::FullViewportUpdate);
 
 
-    auto item = new HaChannel;
-    scene_->addItem (item);
-    item->setObjectName ("任务");
-    human_ = item;
-    item->setPos (scene_->sceneRect ().center () - item->boundingRect ().center ());
+    smed_channel_ = new HaChannel;
+    scene_->addItem (smed_channel_);
+    smed_channel_->setObjectName ("任务");
+    smed_channel_->setPos (scene_->sceneRect ().center () - smed_channel_->boundingRect ().center ());
 
 //        conns.push_back (connect (this, &HaView::totalTimeChanged, item, &HaChannel::setTotalTime));
 //        conns.push_back (connect (item, &HaChannel::efficiencyChanged, this, &HaView::statusChanged));
@@ -65,7 +64,7 @@ void smed_view::barClicked(Channel *bar)
      });
      menu.exec (QCursor::pos ());
 }
-
+#include<QPointF>
 void smed_view::blockClicked(Block *block)
 {
     QMenu menu (this);
@@ -88,6 +87,22 @@ void smed_view::blockClicked(Block *block)
             block->setTime (time);
             block->set_width (time / totalTime () * (channelWidth - 2 * channelGrayWidth));
         }
+    });
+    QMenu smed_menu(this);
+    smed_menu.setTitle ("设置SMED模式");
+    auto internal = smed_menu.addAction ("内换模");
+    auto external = smed_menu.addAction ("外换模");
+    menu.addMenu (&smed_menu);
+
+    connect (external, &QAction::triggered, [this,block] {
+       auto block_y =  block->y ();
+       auto block_x =  block->x();
+       smed_channel_->set_gray_width (smed_channel_->gray_width () + block->width ());
+       QPointF pointf(smed_channel_->gray_width () - block->width (),block_x);
+       block->setPos (pointf);
+    });
+    connect (internal, &QAction::triggered, [this] {
+        qDebug () << "内换模";
     });
     menu.exec (QCursor::pos ());
 }
@@ -119,17 +134,17 @@ smed_view::~smed_view()
 
 void smed_view::setTotalTime(qreal totalTime)
 {
-    human_->setTotalTime (totalTime);
+    smed_channel_->setTotalTime (totalTime);
 }
 
 qreal smed_view::totalTime() const noexcept
 {
-    return human_->totalTime ();
+    return smed_channel_->totalTime ();
 }
 
 const HaChannel *smed_view::bar() const noexcept
 {
-    return human_;
+    return smed_channel_;
 }
 
 } // namespace AmAnalysis
