@@ -18,6 +18,7 @@ Block::Block(QGraphicsItem *parent)
     setFlag (ItemSendsGeometryChanges, true);
     setAcceptHoverEvents (true);
     connect (this, &Block::nameChanged, [this] { update (); });
+    connect (this, &Block::timeChanged, [this] { update (); });
     connect (this, &Block::width_changed, [this] { update (); });
 }
 

@@ -8,6 +8,7 @@
 #include<QCursor>
 #include<QDialog>
 #include<QMessageBox>
+#include<QInputDialog>
 #include"Balance/Analysis/AddTaskDlg.h"
 #include"Balance/Analysis/HaChannel.h"
 #include"Balance/Block.h"
@@ -65,6 +66,32 @@ void smed_view::barClicked(Channel *bar)
      menu.exec (QCursor::pos ());
 }
 
+void smed_view::blockClicked(Block *block)
+{
+    QMenu menu (this);
+    connect (menu.addAction ("删除作业"), &QAction::triggered, [this, block] {
+        block->deleteLater ();
+    });
+    connect (menu.addAction ("设置作业名"), &QAction::triggered, [this, block] {
+        bool isOk = false;
+        const auto text = QInputDialog::getText (this, "作业名", "新作业名", QLineEdit::Normal, block->objectName (), &isOk);
+        if (isOk)
+        {
+            block->setName (text);
+        }
+    });
+    connect (menu.addAction ("设置作业时间"), &QAction::triggered, [this, block] {
+        bool isOk = false;
+        const auto time = QInputDialog::getDouble (this, "作业时间", "新作业时间", block->time (), 0.0, 1000, 2, &isOk);
+        if (isOk)
+        {
+            block->setTime (time);
+            block->set_width (time / totalTime () * (channelWidth - 2 * channelGrayWidth));
+        }
+    });
+    menu.exec (QCursor::pos ());
+}
+
 void smed_view::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent (event);
@@ -81,7 +108,7 @@ void smed_view::mouseReleaseEvent(QMouseEvent *event)
     }
     if (auto block = dynamic_cast<Block *> (item); block != null)
     {
-       // blockClicked (block);
+        blockClicked (block);
     }
 }
 
