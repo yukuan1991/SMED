@@ -2,7 +2,7 @@
 #include <QGraphicsObject>
 #include <base/lang/not_null.h>
 #include <base/lang/move.hpp>
-
+#include"Balance/parameters.hpp"
 
 namespace Balance {
 
@@ -10,10 +10,13 @@ class Block : public QGraphicsObject
 {
     Q_OBJECT
 signals:
+    void timeChanged (qreal);
     void width_changed (qreal);
     void nameChanged (const QString &);
 public:
     Block(QGraphicsItem * parent = null);
+    void setTime (qreal time) { time_ = time;emit timeChanged (time_); }
+    qreal time () const noexcept { return time_; }
 
     void setName (QString name) { name_ = ::move (name); emit nameChanged (name_); }
     const QString & name () const noexcept { return name_; }
@@ -28,6 +31,7 @@ public:
 private:
     qreal width_ = 0;
     QString name_;
+    qreal time_ = 0;
 };
 
 } // namespace Balance

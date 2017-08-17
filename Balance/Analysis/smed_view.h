@@ -13,9 +13,10 @@
 namespace Balance {
 class ResourceScene;
 class Channel;
+class Block;
 namespace Analysis {
 class HaChannel;
-class HaBlock;
+
 
 using std::make_unique;
 using std::end;
@@ -28,6 +29,7 @@ class smed_view : public QGraphicsView
     Q_OBJECT
 public:
     void barClicked(Channel * bar);
+    void blockClicked (Block * block);
     explicit smed_view(QWidget *parent = 0);
     void mouseReleaseEvent (QMouseEvent * event) override;
     ~smed_view() override;

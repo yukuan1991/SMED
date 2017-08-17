@@ -21,10 +21,8 @@ Balance::Channel::Channel(QGraphicsItem *parent)
     connect (this, &Channel::fontChanged, [this] { update (); });
 }
 
-#include <QDebug>
 void Balance::Channel::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget *widget)
 {
-    qDebug() << "paint";
     painter->setBrush (Qt::white);
     painter->setPen (Qt::NoPen);
     painter->drawRect (boundingRect ());
@@ -39,12 +37,6 @@ QRectF Balance::Channel::boundingRect() const
 
 void Balance::Channel::clearItems()
 {
-//    for (auto block : childItems ()
-//         | transformed ([] (auto && child) { return dynamic_cast<TaskBlock*> (child); })
-//         | filtered ([](auto && child) { return child != null; }))
-//    {
-//        block->deleteLater ();
-//    }
 
 }
 
