@@ -13,6 +13,7 @@
 #include <boost/range/algorithm/sort.hpp>
 #include <base/lang/scope.hpp>
 #include "Balance/Block.h"
+#include "Balance/GrayRectItem.h"
 
 namespace Balance {
 namespace Analysis {
@@ -25,19 +26,16 @@ using std::end;
 HaChannel::HaChannel(QGraphicsObject *parent)
     :Channel (parent)
 {
-    auto rightper = new QGraphicsRectItem (0, 0, gray_width (), channelHeight, this);
-    rightper->setBrush (QColor (127, 127, 127, 100));
-    rightper->setZValue (3);
-    rightper->setPen (Qt::NoPen);
+    auto rightper = new GrayRectItem (0, 0, gray_width (), channelHeight, this);
     rightper->setPos (channelWidth - gray_width (), 0);
 
-    auto leftper = new QGraphicsRectItem (0, 0, gray_width (), channelHeight, this);
-    leftper->setBrush (QColor (127, 127, 127, 100));
-    leftper->setPen (Qt::NoPen);
-    leftper->setZValue (3);
+    auto leftper = new GrayRectItem (0, 0, gray_width (), channelHeight, this);
     leftper->setPos (0, 0);
 
-    connect (this, &HaChannel::gray_widthChanged, [this] { update (); });
+    using f_ptr = void (GrayRectItem::*)(const QRectF&);
+    auto p = f_ptr(&GrayRectItem::setRect);
+
+    connect (this, &HaChannel::gray_widthChanged, leftper, p);
 }
 
 void HaChannel::addTask(add_task params)

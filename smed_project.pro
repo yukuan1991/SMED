@@ -40,7 +40,8 @@ SOURCES += \
     Balance/Channel.cc \
     Balance/Block.cc \
     video/progress_label.cpp \
-    video/video_widget.cc
+    video/video_widget.cc \
+    Balance/GrayRectItem.cc
 
 HEADERS += \
         smed_main.h \
@@ -60,7 +61,8 @@ HEADERS += \
     Balance/Block.h \
     video/progress_label.h \
     video/video_player.hpp \
-    video/video_widget.h
+    video/video_widget.h \
+    Balance/GrayRectItem.h
 
 FORMS += \
         smed_main.ui \
