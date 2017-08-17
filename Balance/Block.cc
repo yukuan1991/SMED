@@ -66,32 +66,16 @@ void Block::paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidg
                                QSizeF (real_w, h)), final_text);
 }
 
-//    Q_UNUSED (item);
-//    Q_UNUSED (widget);
-//    if (item->state & QStyle::State_Selected)
-//    {
-//        painter->setBrush (Qt::red);
-//        painter->setPen (Qt::black);
-//    }
-//    else
-//    {
-//        painter->setBrush (Qt::yellow);
-//    }
-//    painter->setBrush (blockArea);
-//    painter->setPen (Qt::NoPen);
-//    painter->drawRect (boundingRect ());
-
 QRectF Block::boundingRect() const
 {
-    const auto height = parentItem ()->boundingRect ().height ();
-    return QRectF (0, 0, width (), height);
+    const auto height = parentItem ()->boundingRect ().height () - 20;
+    return QRectF (0, 10, width (), height);
 }
 
 QVariant Block::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
     if (change == ItemPositionChange)
     {
-
         const auto new_pos = value.toPointF ();
         const auto old_pos = pos ();
         const auto x = new_pos.x ();

@@ -25,17 +25,19 @@ using std::end;
 HaChannel::HaChannel(QGraphicsObject *parent)
     :Channel (parent)
 {
-    auto rightper = new QGraphicsRectItem (0, 0, channelGrayWidth, channelHeight, this);
+    auto rightper = new QGraphicsRectItem (0, 0, gray_width (), channelHeight, this);
     rightper->setBrush (QColor (127, 127, 127, 100));
     rightper->setZValue (3);
     rightper->setPen (Qt::NoPen);
-    rightper->setPos (channelWidth - channelGrayWidth, 0);
+    rightper->setPos (channelWidth - gray_width (), 0);
 
-    auto leftper = new QGraphicsRectItem (0, 0, channelGrayWidth, channelHeight, this);
+    auto leftper = new QGraphicsRectItem (0, 0, gray_width (), channelHeight, this);
     leftper->setBrush (QColor (127, 127, 127, 100));
     leftper->setPen (Qt::NoPen);
     leftper->setZValue (3);
     leftper->setPos (0, 0);
+
+    connect (this, &HaChannel::gray_widthChanged, [this] { update (); });
 }
 
 void HaChannel::addTask(add_task params)

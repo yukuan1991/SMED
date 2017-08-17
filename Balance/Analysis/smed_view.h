@@ -37,7 +37,7 @@ public:
     qreal totalTime () const noexcept;
     const HaChannel * bar () const noexcept;
 private:
-    HaChannel * human_ = nullptr;
+    HaChannel * smed_channel_ = nullptr;
     std::unique_ptr<Balance::ResourceScene> scene_;
 };
 } // namespace AmAnalysis

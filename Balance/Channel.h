@@ -30,6 +30,7 @@ public:
     struct add_task { const QString & taskName; qreal time; qreal startAt = 0; };
     /// 增加任务 taskName -> 任务名称, time -> 任务用时, startAt -> 起始时间
     virtual void addTask (add_task) = 0;
+
 private:
     QFont font_;
 };
