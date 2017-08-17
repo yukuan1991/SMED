@@ -6,7 +6,7 @@
 #include <utility>
 #include <QString>
 #include <QVariantMap>
-
+#include "Balance/parameters.hpp"
 
 namespace Balance {
 namespace Analysis {
@@ -17,7 +17,7 @@ class HaChannel final : public Balance::Channel
 signals:
     void efficiencyChanged ();
     void totalTimeChanged (qreal);
-    void gray_widthChanged (qreal);
+    void gray_widthChanged (const QRectF &rectangle);
 public:
     HaChannel(QGraphicsObject * parent = null);
     /// 增加任务 taskName -> 任务名称, time -> 任务用时, startAt -> 起始时间
@@ -25,11 +25,12 @@ public:
     void setTotalTime (qreal time);
     qreal totalTime () const noexcept { return totalTime_; }
 
-    void set_gray_width (qreal w) { gray_width_ = w;emit gray_widthChanged (gray_width_);}
+    void set_gray_width (qreal w) {
+        qDebug() << "gray_width"; gray_width_ = w;emit gray_widthChanged (QRectF(0, 0, gray_width_, channelHeight));}
     qreal gray_width () const noexcept { return gray_width_; }
 private:
     qreal totalTime_;
-    qreal gray_width_ = 0;
+    qreal gray_width_ = 100;
 };
 
 } // namespace HmAnalysis
