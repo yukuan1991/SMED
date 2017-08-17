@@ -29,7 +29,7 @@ public:
     qreal gray_width () const noexcept { return gray_width_; }
 private:
     qreal totalTime_;
-    qreal gray_width_ = 0;
+    qreal gray_width_ = 200;
 };
 
 } // namespace HmAnalysis
