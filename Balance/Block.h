@@ -27,8 +27,12 @@ public:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
     void set_width (qreal w) { width_ = w;emit width_changed (width_);}
-    qreal width () const noexcept { return width_; }
+    qreal width () const noexcept { return width_; } 
+    bool isDragged () const noexcept { return isDragged_; }
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 private:
+    bool isDragged_ = false;
     qreal width_ = 0;
     QString name_;
     qreal time_ = 0;

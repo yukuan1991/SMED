@@ -24,6 +24,7 @@ using std::vector;
 using std::make_pair;
 using std::pair;
 
+
 class smed_view : public QGraphicsView
 {
     Q_OBJECT

@@ -6,6 +6,12 @@
 #include <QApplication>
 #include<QStyle>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsSceneMoveEvent>
+#include <QDrag>
+#include <QMimeData>
+#include <memory>
+#include <QDebug>
+
 namespace Balance {
 
 Block::Block(QGraphicsItem *parent)
@@ -95,6 +101,45 @@ QVariant Block::itemChange(QGraphicsItem::GraphicsItemChange change, const QVari
     else
     {
         return QGraphicsItem::itemChange (change, value);
+    }
+}
+
+void Block::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "Block::mousePressEvent";
+    QGraphicsObject::mouseMoveEvent(event);
+
+//    auto pos = event->pos();
+    auto  rect = boundingRect();
+    QPixmap pix(static_cast<int>(rect.width()),
+                static_cast<int>(rect.height() + 20));
+    pix.fill(Qt::transparent);
+    QPainter painter(&pix);
+    painter.setRenderHint(QPainter::Antialiasing);
+    QStyleOptionGraphicsItem option;
+    this->paint(&painter, &option, nullptr);
+
+    QDrag drag(this);
+    auto data = std::make_unique<QMimeData> ();
+    {
+        const auto taskname = name();
+        const auto str = objectName();
+        const auto taskwidth = QString::number(width());
+
+        data->setData("item", str.toUtf8());
+        data->setData("taskname", taskname.toUtf8());
+        data->setData("taskwidth", taskwidth.toUtf8());
+    }
+
+    drag.setMimeData (data.release ());
+    drag.setPixmap (pix);
+    drag.setHotSpot ({pix.width () / 2 , pix.height() / 2 });
+
+    isDragged_ = true;
+    const auto action = drag.exec(Qt::CopyAction | Qt::MoveAction);
+    if(action == Qt::MoveAction)
+    {
+        this->deleteLater();
     }
 }
 

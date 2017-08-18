@@ -64,7 +64,7 @@ void smed_view::barClicked(Channel *bar)
      });
      menu.exec (QCursor::pos ());
 }
-#include<QPointF>
+
 void smed_view::blockClicked(Block *block)
 {
     QMenu menu (this);
@@ -109,6 +109,7 @@ void smed_view::blockClicked(Block *block)
 
 void smed_view::mouseReleaseEvent(QMouseEvent *event)
 {
+    qDebug() << "smed_view::mouseReleaseEvent";
     QGraphicsView::mouseReleaseEvent (event);
     const auto button = event->button ();
     if (button != Qt::RightButton)

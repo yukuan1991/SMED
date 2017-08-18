@@ -7,9 +7,12 @@
 #include <QString>
 #include <QVariantMap>
 #include "Balance/parameters.hpp"
+#include "Balance/Block.h"
 
 namespace Balance {
 namespace Analysis {
+
+
 
 class HaChannel final : public Balance::Channel
 {
@@ -25,16 +28,20 @@ public:
     void setTotalTime (qreal time);
     qreal totalTime () const noexcept { return totalTime_; }
 
-    void set_gray_width (qreal w) {
-        qDebug() << "gray_width"; gray_width_ = w;emit gray_widthChanged (QRectF(0, 0, gray_width_, channelHeight));}
+    void set_gray_width (qreal w) { gray_width_ = w;
+                                    emit gray_widthChanged (QRectF(0, 0, gray_width_, channelHeight)); }
     qreal gray_width () const noexcept { return gray_width_; }
+protected:
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event) override;
+//    void dragLeaveEvent(QGraphicsSceneDragDropEvent *event) override;
+//    void dragMoveEvent(QGraphicsSceneDragDropEvent *event) override;
+    void dropEvent(QGraphicsSceneDragDropEvent *event) override;
+    void dropAction(QGraphicsSceneDragDropEvent *event);
 private:
     qreal totalTime_;
-<<<<<<< HEAD
-    qreal gray_width_ = 200;
-=======
-    qreal gray_width_ = 100;
->>>>>>> sponge
+    qreal gray_width_ = 0;
+    std::vector<Block*> taskBlocks_;
+
 };
 
 } // namespace HmAnalysis

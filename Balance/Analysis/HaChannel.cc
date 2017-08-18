@@ -14,6 +14,10 @@
 #include <base/lang/scope.hpp>
 #include "Balance/Block.h"
 #include "Balance/GrayRectItem.h"
+#include <QGraphicsSceneDragDropEvent>
+#include <QMimeData>
+#include <QWidget>
+#include <boost/range/algorithm/sort.hpp>
 
 namespace Balance {
 namespace Analysis {
@@ -36,6 +40,8 @@ HaChannel::HaChannel(QGraphicsObject *parent)
     auto p = f_ptr(&GrayRectItem::setRect);
 
     connect (this, &HaChannel::gray_widthChanged, leftper, p);
+
+    setAcceptDrops(true);
 }
 
 void HaChannel::addTask(add_task params)
@@ -46,9 +52,11 @@ void HaChannel::addTask(add_task params)
     auto totaltime =  totalTime ();
     auto width = (params.time / totaltime) * (channelWidth - 2 * channelGrayWidth);
     newTask->set_width (width);
-    newTask->setFlag (QGraphicsItem::ItemIsMovable);
+//    newTask->setFlag (QGraphicsItem::ItemIsMovable);
     newTask->setFlag (QGraphicsItem::ItemIsSelectable);
     newTask->setPos ({channelGrayWidth, 0});
+
+    taskBlocks_.emplace_back(newTask);
 }
 
 void HaChannel::setTotalTime(qreal time)
@@ -57,6 +65,74 @@ void HaChannel::setTotalTime(qreal time)
 
     emit totalTimeChanged (time);
 }
+
+void HaChannel::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("item"))
+    {
+        qDebug() << "HaChannel::dragEnterEvent";
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+    else
+    {
+        qDebug() << "Channel::dragEnterEvent(event)";
+        Channel::dragEnterEvent(event);
+    }
+}
+
+void HaChannel::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("item"))
+    {
+        qDebug() << "HaChannel::dropEvent";
+        dropAction(event);
+        event->accept();
+    }
+    else
+    {
+        qDebug() << "Channel::dropEvent(event)";
+        Channel::dropEvent(event);
+    }
+}
+
+void HaChannel::dropAction(QGraphicsSceneDragDropEvent *event)
+{
+    QString obj = event->mimeData()->data("item");
+    QString taskname = event->mimeData()->data("taskname");
+    auto taskwidth = (event->mimeData()->data("taskwidth")).toDouble();
+    qDebug() << taskname;
+
+    event->pos();
+
+    std::vector<Block*> unDragged;
+    auto rng = childItems () | transformed ([] (auto & c) { return dynamic_cast<Block*> (c);})
+            | filtered ([&] (auto && c) { return c != null and not c->isDragged (); });
+
+    push_back (unDragged, rng);
+    sort (unDragged, [] (auto && c1, auto && c2) { return c1->pos ().x () < c2->pos ().x (); });
+
+    for (auto & it : unDragged)
+    {
+        qDebug () << it->pos ();
+    }
+
+    const auto pos = event->pos();
+    const auto scene_pos = mapToScene(pos);
+
+    auto block = new Block(this);
+    block->setObjectName(obj);
+    block->setName(taskname);
+    block->set_width(taskwidth);
+    block->setFlag (QGraphicsItem::ItemIsSelectable);
+    const auto rect_center = block->boundingRect().center();
+    auto center_pos = scene_pos - rect_center;
+    block->setPos(center_pos);
+
+}
+
+
+
 
 
 } // namespace HmAnalysis
